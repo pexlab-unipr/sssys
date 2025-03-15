@@ -1,5 +1,5 @@
 # sssys
-A library for the implementation of state space models on embedded systems.
+A library for the implementation of linear state space models on embedded systems.
 
 ## Dependencies
 The code relies on Detego (https://github.com/matteodalboni/detego).
