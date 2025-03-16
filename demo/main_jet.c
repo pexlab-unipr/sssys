@@ -1,5 +1,74 @@
-// This code is based on the Matlab example 
-// https://www.mathworks.com/help/control/ug/yaw-damper-design-for-a-747-jet-aircraft.html
+/* This code is based on the Matlab example
+https://www.mathworks.com/help/control/ug/yaw-damper-design-for-a-747-jet-aircraft.html
+The following Matlab script can be use to validate the resaults.
+clear; close all; clc;
+
+%% Continuous time system
+A = [-0.0558   -0.9968    0.0802    0.0415
+    0.5980   -0.1150   -0.0318         0
+    -3.0500    0.3880   -0.4650         0
+    0    0.0805    1.0000         0];
+B = [ 0.0073         0
+    -0.4750    0.0077
+    0.1530    0.1430
+    0         0];
+C = [0     1     0     0
+    0     0     0     1
+    1   0   0   0];
+D = [0     0
+    0     0
+    0   0];
+
+t_ref = 0:1e-5:10;
+u = [10; 100];
+sys_ref = ss(A,B,C,D);
+y_ref = lsim(sys_ref, repmat(u, size(t_ref)), t_ref);
+
+%% Discrete time system
+Ts = 0.1;
+t = 0:Ts:10;
+
+sysc = ss(A,B,C,D);
+sysd = c2d(sysc,Ts,'zoh');
+
+Ad = (sysd.A);
+Bd = (sysd.B);
+Cd = (sysd.C);
+Dd = (sysd.D);
+
+x = zeros(size(A,1),1);
+y = zeros(size(C,1), length(t));
+for k = 1:length(t)
+    y(:,k) = Cd*x + Dd*u;
+    x = Ad*x + Bd*u;
+end
+
+%% Data import
+p = "./";
+fid = fopen(p + "yaw_rate.bin");
+y1 = fread(fid,'single');
+fclose(fid);
+
+fid = fopen(p + "bank_angle.bin");
+y2 = fread(fid,'single');
+fclose(fid);
+
+fid = fopen(p + "sideslip_angle.bin");
+y3 = fread(fid,'single');
+fclose(fid);
+
+%% Figures
+figure
+plot(t_ref, y_ref','k', t, y', 'r',...
+    t, y1(:), 'b-.', t, y2(:), 'b-.', t, y3(:), 'b-.', 'LineWidth', 1);
+grid on
+
+figure
+subplot(3,1,1); plot(y1(:) - y(1,:)'); grid on;
+subplot(3,1,2); plot(y2(:) - y(2,:)'); grid on;
+subplot(3,1,3); plot(y3(:) - y(3,:)'); grid on;
+*/
+
 #include <stdio.h>
 #include "sssys.h"
 #include "detego.h"
@@ -52,7 +121,7 @@ int main()
     FILE* y3_file = fopen("../sideslip_angle.bin", "wb");
 
     state_space_init(&ss, Nx, Nu, Ny, x, y, A, B, C, D);
-    state_space_discretize(&ss, Ts, "foh", work);
+    state_space_discretize(&ss, Ts, "zoh", work);
 
     printf("Ad = \n"); disp(A, Nx, Nx);
     printf("Bd = \n"); disp(B, Nx, Nu);
