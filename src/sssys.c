@@ -1,7 +1,7 @@
 #include "sssys.h"
 #include "detego.h"
 
-void state_space_init(State_space* ss, int Nx, int Nu, int Ny,
+void statespace_init(Statespace* ss, int Nx, int Nu, int Ny,
 	float* x, float* y, float* A, float* B, float* C, float* D)
 {
 	ss->Nx = Nx;
@@ -15,7 +15,7 @@ void state_space_init(State_space* ss, int Nx, int Nu, int Ny,
 	ss->D = D;
 }
 
-int state_space_convert_tf_coeffs(State_space* ss, float* num, float* den)
+int statespace_tf2ss(Statespace* ss, float* num, float* den)
 {
 	int i;
 	const int Nx = ss->Nx;
@@ -38,7 +38,7 @@ int state_space_convert_tf_coeffs(State_space* ss, float* num, float* den)
 	return 0;
 }
 
-int state_space_discretize(State_space* ss, float Ts, char* method, float* work)
+int statespace_c2d(Statespace* ss, float Ts, char* method, float* work)
 {
 	int i, j, k, p;
 	const int Nx = ss->Nx;
@@ -262,7 +262,7 @@ int state_space_discretize(State_space* ss, float Ts, char* method, float* work)
 	return 0;
 }
 
-void state_space_iter(State_space* ss, float* u, float* work)
+void statespace_iter(Statespace* ss, float* u, float* work)
 {
 	int i, j;
 	const int Nx = ss->Nx;

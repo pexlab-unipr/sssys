@@ -41,22 +41,22 @@ int main()
 	float num[] = { 6e-06f, 0.004987f, 0.987f, 394.8f, 3.948e-07f };
 	float den[] = { 0.0001f, 0.04f, 9.87f, 3948.0f, 0.0f };
 	float A[Nx * Nx], B[Nx], C[Nx], D[1], x[Nx] = { 0 };
-	float work[(Nx + 2) * (4 * (Nx + 2) + 1)];
+	float work[STATESPACE_WORKLEN_FOH(Nx, 1)];
 	float t = 0, Ts = 1e-4f, tend = 2, u = 0, y = 0;
 	int i, n = (int)(tend / Ts) + 1;
-	State_space ss = { 0 };
+	Statespace ss = { 0 };
 	FILE* t_file = fopen("../t.bin", "wb");
 	FILE* y_file = fopen("../y.bin", "wb");
 
-	state_space_init(&ss, 4, 1, 1, x, &y, A, B, C, D);
-	state_space_convert_tf_coeffs(&ss, num, den);
-	state_space_discretize(&ss, Ts, "tustin", work);
+	statespace_init(&ss, 4, 1, 1, x, &y, A, B, C, D);
+	statespace_tf2ss(&ss, num, den);
+	statespace_c2d(&ss, Ts, "tustin", work);
 
 	for (i = 0; i < n; i++)
 	{
 		t = i * Ts;
 		u = sinf(2 * (float)M_PI * 40 * t);
-		state_space_iter(&ss, &u, work);
+		statespace_iter(&ss, &u, work);
 		fwrite(&t, sizeof(float), 1, t_file);
 		fwrite(&y, sizeof(float), 1, y_file);
 	}

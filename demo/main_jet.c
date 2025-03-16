@@ -88,7 +88,6 @@ static void disp(float* A, int rows, int cols)
 #define Nx 4
 #define Nu 2
 #define Ny 3
-#define WORK_LENGTH ((Nx + 2 * Nu) * (4 * (Nx + 2 * Nu) + 1))
 
 int main()
 {
@@ -111,8 +110,8 @@ int main()
         0, 0,
         0, 0};
     float x[Nx] = { 0 };
-    float work[WORK_LENGTH] = { 0 };
-    State_space ss = { 0 };
+    float work[STATESPACE_WORKLEN_FOH(Nx, Nu)] = {0};
+    Statespace ss = { 0 };
     int i = 0;
     float u[] = { 10, 100 }, y[] = { 0, 0, 0 };
     float Ts = 0.1f;
@@ -120,8 +119,8 @@ int main()
     FILE* y2_file = fopen("../bank_angle.bin", "wb");
     FILE* y3_file = fopen("../sideslip_angle.bin", "wb");
 
-    state_space_init(&ss, Nx, Nu, Ny, x, y, A, B, C, D);
-    state_space_discretize(&ss, Ts, "zoh", work);
+    statespace_init(&ss, Nx, Nu, Ny, x, y, A, B, C, D);
+    statespace_c2d(&ss, Ts, "zoh", work);
 
     printf("Ad = \n"); disp(A, Nx, Nx);
     printf("Bd = \n"); disp(B, Nx, Nu);
@@ -130,7 +129,7 @@ int main()
 
     while (i++ * Ts <= 10)
     {
-        state_space_iter(&ss, u, work);
+        statespace_iter(&ss, u, work);
         fwrite(y + 0, sizeof(float), 1, y1_file);
         fwrite(y + 1, sizeof(float), 1, y2_file);
         fwrite(y + 2, sizeof(float), 1, y3_file);
