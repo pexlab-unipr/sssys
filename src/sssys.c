@@ -181,9 +181,9 @@ int statespace_c2d(Statespace* ss, float Ts, char* method, float* work)
 	case 'z': // Zero-order hold
 
 		// Ad = exp(A*Ts)
-		//		/ Ts
+		//      / Ts
 		// Bd = | (exp(A*(Ts-t))dt)*B
-		//		/ 0
+		//      / 0
 		// or [Ad, Bd; 0, I] = exp([A*Ts, B*Ts; 0, 0])
 		// Cd = C
 		// Dd = D
@@ -198,7 +198,7 @@ int statespace_c2d(Statespace* ss, float Ts, char* method, float* work)
 		}
 
 		// Compute exp(L) = [Ad, Bd; 0, I]
-		matrixf_exp(&L, work + L.size[0] * L.size[1]);
+		if (matrixf_exp(&L, work + L.size[0] * L.size[1])) return 1;
 
 		// Get the blocks Ad and Bd
 		for (i = 0; i < Nx; i++) {
@@ -230,7 +230,7 @@ int statespace_c2d(Statespace* ss, float Ts, char* method, float* work)
 
 		// Compute exp(L) = [Ad, G1, G2; 0, I, I; 0, 0, I]
 		p = L.size[0] * L.size[1];
-		matrixf_exp(&L, work + p);
+		if (matrixf_exp(&L, work + p)) return 1;
 
 		// Get the blocks Ad, G1 and G2
 		for (i = 0; i < Nx; i++) {

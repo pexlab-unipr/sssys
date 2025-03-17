@@ -2,12 +2,12 @@
 #define SSSYS_H
 
 typedef struct {
-	int Nx;						// number of states
-	int Nu;						// number of inputs
-	int Ny;						// number of outputs
-	float* x;					// states
-	float* y;					// outputs
-	float* A, * B, * C, * D;	// system matrices
+	int Nx; // number of states
+	int Nu; // number of inputs
+	int Ny; // number of outputs
+	float* x; // states
+	float* y; // outputs
+	float* A, * B, * C, * D; // system matrices
 } Statespace;
 
 // Initialization of a state-space system. 
@@ -19,6 +19,8 @@ void statespace_init(Statespace* ss, int Nx, int Nu, int Ny,
 // into state-space form. num and den are the arrays of transfer-function
 // numerator and denominator coefficients, respectively. Their length is 
 // Nx + 1. The coefficients are specified in order of descending power.
+// The function returns 1 if the system is not SISO, otherwise, in case
+// of success, it returns 0.
 int statespace_tf2ss(Statespace* ss, float* num, float* den);
 
 // Discretization of a continuous-time state-space system. 
@@ -36,6 +38,8 @@ int statespace_tf2ss(Statespace* ss, float* num, float* den);
 // 4) "z" -> (Nx+Nu)*(4*(Nx+Nu)+1);
 // 5) "f" -> (Nx+2*Nu)*(4*(Nx+2*Nu)+1).
 // Use the dedicated macros to set the appropriate workspace memory.
+// The function returns 1 if the system is singular, otherwise, in case
+// of success, it returns 0.
 int statespace_c2d(Statespace* ss, float Ts, char* method, float* work);
 
 // Update of the discrete system response with inputs u. 
