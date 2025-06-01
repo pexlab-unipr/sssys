@@ -1,5 +1,5 @@
 #include "sssys.h"
-#include "detego.h"
+#include "detectum.h"
 
 void statespace_init(Statespace* ss, int Nx, int Nu, int Ny,
 	float* x, float* y, float* A, float* B, float* C, float* D)

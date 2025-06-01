@@ -71,7 +71,7 @@ subplot(3,1,3); plot(y3(:) - y(3,:)'); grid on;
 
 #include <stdio.h>
 #include "sssys.h"
-#include "detego.h"
+#include "detectum.h"
 
 static void disp(float* A, int rows, int cols)
 {
