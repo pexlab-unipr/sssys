@@ -21,7 +21,7 @@ void statespace_init(Statespace* ss, int Nx, int Nu, int Ny,
 // Nx + 1. The coefficients are specified in order of descending power.
 // The function returns 1 if the system is not SISO, otherwise, in case
 // of success, it returns 0.
-int statespace_tf2ss(Statespace* ss, float* num, float* den);
+int statespace_tf2ss(Statespace* ss, const float* num, const float* den);
 
 // Discretization of a continuous-time state-space system. 
 // This function converts the matrices from continuous to discrete form
@@ -40,7 +40,7 @@ int statespace_tf2ss(Statespace* ss, float* num, float* den);
 // Use the dedicated macros to set the appropriate workspace memory.
 // The function returns 1 if the system is singular, otherwise, in case
 // of success, it returns 0.
-int statespace_c2d(Statespace* ss, float Ts, char* method, float* work);
+int statespace_c2d(Statespace* ss, const float Ts, const char* method, float* work);
 
 // Update of the discrete system response with inputs u. 
 // The length of the workspace (work) is Nx.

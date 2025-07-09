@@ -15,7 +15,7 @@ void statespace_init(Statespace* ss, int Nx, int Nu, int Ny,
 	ss->D = D;
 }
 
-int statespace_tf2ss(Statespace* ss, float* num, float* den)
+int statespace_tf2ss(Statespace* ss, const float* num, const float* den)
 {
 	int i;
 	const int Nx = ss->Nx;
@@ -40,7 +40,7 @@ int statespace_tf2ss(Statespace* ss, float* num, float* den)
 	return 0;
 }
 
-int statespace_c2d(Statespace* ss, float Ts, char* method, float* work)
+int statespace_c2d(Statespace* ss, const float Ts, const char* method, float* work)
 {
 	int i, j, k, p;
 	const int Nx = ss->Nx;

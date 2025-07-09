@@ -48,7 +48,7 @@ int main()
 	FILE* t_file = fopen("../t.bin", "wb");
 	FILE* y_file = fopen("../y.bin", "wb");
 
-	statespace_init(&ss, 4, 1, 1, x, &y, A, B, C, D);
+	statespace_init(&ss, Nx, 1, 1, x, &y, A, B, C, D);
 	statespace_tf2ss(&ss, num, den);
 	statespace_c2d(&ss, Ts, "tustin", work);
 
