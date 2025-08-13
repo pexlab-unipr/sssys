@@ -229,8 +229,8 @@ int statespace_c2d(Statespace* ss, const float Ts, const char* method, float* wo
 
 		// Assemble L = [A*Ts, B*Ts; 0, 0]
 		matrixf_init(&L, Nx + Nu, Nx + Nu, work, 0);
-		for (i = 0; i < L.size[0]; i++) {
-			for (j = 0; j < L.size[1]; j++) {
+		for (i = 0; i < L.rows; i++) {
+			for (j = 0; j < L.cols; j++) {
 				if (j < Nx) {
 					at(&L, i, j) = (i < Nx) ? A[i * Nx + j] * Ts : 0;
 				}
@@ -241,13 +241,13 @@ int statespace_c2d(Statespace* ss, const float Ts, const char* method, float* wo
 		}
 
 		// Compute exp(L) = [Ad, Bd; 0, I]
-		if (matrixf_exp(&L, work + L.size[0] * L.size[1])) {
+		if (matrixf_exp(&L, work + L.rows * L.cols)) {
 			return 1;
 		}
 
 		// Get the blocks Ad and Bd
 		for (i = 0; i < Nx; i++) {
-			for (j = 0; j < L.size[1]; j++) {
+			for (j = 0; j < L.cols; j++) {
 				if (j < Nx) {
 					A[i * Nx + j] = at(&L, i, j);
 				}
@@ -268,7 +268,7 @@ int statespace_c2d(Statespace* ss, const float Ts, const char* method, float* wo
 
 		// Assemble L = [A*Ts, B*Ts, 0; 0, 0, I; 0, 0, 0]
 		matrixf_init(&L, Nx + 2 * Nu, Nx + 2 * Nu, work, 0);
-		for (i = 0; i < L.size[0] * L.size[1]; i++) {
+		for (i = 0; i < L.rows * L.cols; i++) {
 			work[i] = 0;
 		}
 		for (i = 0; i < Nu; i++) {
@@ -286,14 +286,14 @@ int statespace_c2d(Statespace* ss, const float Ts, const char* method, float* wo
 		}
 
 		// Compute exp(L) = [Ad, G1, G2; 0, I, I; 0, 0, I]
-		p = L.size[0] * L.size[1];
+		p = L.rows * L.cols;
 		if (matrixf_exp(&L, work + p)) {
 			return 1;
 		}
 
 		// Get the blocks Ad, G1 and G2
 		for (i = 0; i < Nx; i++) {
-			for (j = 0; j < L.size[1]; j++) {
+			for (j = 0; j < L.cols; j++) {
 				if (j < Nx) {
 					A[i * Nx + j] = at(&L, i, j);
 				}
