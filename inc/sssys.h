@@ -1,19 +1,21 @@
 #ifndef SSSYS_H
 #define SSSYS_H
 
+#include <stddef.h>
+
 typedef struct {
-	int Nx; // number of states
-	int Nu; // number of inputs
-	int Ny; // number of outputs
-	float* x; // states
-	float* y; // outputs
-	float* A, * B, * C, * D; // system matrices
+  size_t Nx; // number of states
+  size_t Nu; // number of inputs
+  size_t Ny; // number of outputs
+  float* x; // states
+  float* y; // outputs
+  float* A, * B, * C, * D; // system matrices
 } Statespace;
 
 // Initialization of a state-space system. 
 // The matrices are stored in row-major order.
-void statespace_init(Statespace* ss, int Nx, int Nu, int Ny,
-	float* x, float* y, float* A, float* B, float* C, float* D);
+void statespace_init(Statespace* ss, size_t Nx, size_t Nu, size_t Ny,
+  float* x, float* y, float* A, float* B, float* C, float* D);
 
 // Conversion of discrete or continuous-time SISO transfer function
 // into state-space form. num and den are the arrays of transfer-function
