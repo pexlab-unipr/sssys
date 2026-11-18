@@ -88,7 +88,7 @@ static void disp(float* A, int rows, int cols)
 #define Nu 2
 #define Ny 3
 
-int main()
+int main(void)
 {
   float A[Nx * Nx] = {
       -0.0558f, -0.9968f, 0.0802f, 0.0415f,

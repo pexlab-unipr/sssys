@@ -36,7 +36,7 @@ figure; plot(t,y,t_,y_)
 
 #define Nx 4
 
-int main()
+int main(void)
 {
   float num[] = { 6e-06f, 0.004987f, 0.987f, 394.8f, 3.948e-07f };
   float den[] = { 0.0001f, 0.04f, 9.87f, 3948.0f, 0.0f };
